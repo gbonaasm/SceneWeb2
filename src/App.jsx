@@ -3,7 +3,7 @@ import { Routes, Route, Link } from "react-router-dom";
 import FilmList from "./pages/FilmList";
 import FilmDetail from "./pages/FilmDetail";
 import Home from "./pages/Home";
-import NotFound from "./pages/NotFound"; // 🔹 import
+import NotFound from "./pages/NotFound";
 
 export default function App() {
   return (
@@ -12,8 +12,8 @@ export default function App() {
 
       {/* Navigasi */}
       <nav style={{ marginBottom: "20px" }}>
-        <Link to="/" style={{ marginRight: "10px", color: "cyan" }}>List Film</Link>
-        <Link to="/about" style={{ color: "cyan" }}>About</Link>
+        <Link to="/" style={{ marginRight: "10px", color: "cyan" }}>Home</Link>
+        <Link to="/list" style={{ color: "cyan" }}>List Film</Link>
       </nav>
 
       {/* Routing */}
@@ -23,7 +23,7 @@ export default function App() {
         <Route path="/film/:id" element={<FilmDetail />} />
         <Route path="/about" element={<h2>Website Streaming Sederhana 🚀</h2>} />
 
-        {/* 🔹 Fallback route */}
+        {/* 🔹 fallback route */}
         <Route path="*" element={<NotFound />} />
       </Routes>
     </div>

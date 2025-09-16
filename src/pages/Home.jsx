@@ -1,14 +1,11 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { films } from "../data/Film"; // ✅ ambil data dari 1 tempat
+
 
 export default function Home() {
-  const films = [
-    { id: 1, title: "Film Pertama", genre: "Aksi", duration: "1j 30m", rating: 4.5, description: "Film aksi seru tentang petualangan seorang pahlawan.", src: "https://www.w3schools.com/html/mov_bbb.mp4", thumbnail: "https://placehold.co/300x180?text=Film+1" },
-    { id: 2, title: "Film Kedua", genre: "Drama", duration: "2j 10m", rating: 4.0, description: "Drama emosional penuh perjuangan.", src: "https://www.w3schools.com/html/movie.mp4", thumbnail: "https://placehold.co/300x180?text=Film+2" },
-    { id: 3, title: "Film Lucu", genre: "Komedi", duration: "1j 20m", rating: 3.8, description: "Film komedi segar untuk hiburan keluarga.", src: "https://www.w3schools.com/html/mov_bbb.mp4", thumbnail: "https://placehold.co/300x180?text=Film+3" },
-    { id: 4, title: "Film Aksi Seru", genre: "Aksi", duration: "1j 50m", rating: 4.7, description: "Aksi tanpa henti dengan efek spektakuler.", src: "https://www.w3schools.com/html/movie.mp4", thumbnail: "https://placehold.co/300x180?text=Film+4" },
-  ];
 
+  
   const featuredFilm = films[0]; // Banner ambil film pertama
   const sections = ["Aksi", "Drama", "Komedi"];
 

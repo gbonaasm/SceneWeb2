@@ -1,44 +1,19 @@
-///////testing//////
-
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { films } from "../data/Film"; // ✅ pakai data global
 
 export default function FilmList() {
   const [search, setSearch] = useState("");
   const [selectedGenre, setSelectedGenre] = useState("All");
 
-const films = [
-  { 
-    id: 1, 
-    title: "Film Pertama", 
-    genre: "Aksi", 
-    duration: "1j 30m", 
-    rating: 4.5, 
-    description: "Film aksi seru tentang petualangan seorang pahlawan melawan kejahatan.", 
-    src: "https://www.w3schools.com/html/mov_bbb.mp4", 
-    thumbnail: "https://placehold.co/300x180?text=Film+1" 
-  },
-  { 
-    id: 2, 
-    title: "Film Kedua", 
-    genre: "Drama", 
-    duration: "2j 10m", 
-    rating: 4.0, 
-    description: "Drama emosional yang menceritakan kisah keluarga penuh perjuangan.", 
-    src: "https://www.w3schools.com/html/movie.mp4", 
-    thumbnail: "https://placehold.co/300x180?text=Film+2" 
-  }
-];
+  // ambil daftar genre unik
+  const genres = ["All", ...new Set(films.map((f) => f.genre))];
 
-
-  // Ambil semua genre unik
-  const genres = ["All", ...new Set(films.map((film) => film.genre))];
-
-  // Filter berdasarkan search & genre
+  // filter film berdasarkan search & genre
   const filteredFilms = films.filter((film) => {
-    const matchSearch = film.title.toLowerCase().includes(search.toLowerCase());
-    const matchGenre = selectedGenre === "All" || film.genre === selectedGenre;
-    return matchSearch && matchGenre;
+    const matchesSearch = film.title.toLowerCase().includes(search.toLowerCase());
+    const matchesGenre = selectedGenre === "All" || film.genre === selectedGenre;
+    return matchesSearch && matchesGenre;
   });
 
   return (
@@ -83,7 +58,7 @@ const films = [
               <img src={film.thumbnail} alt={film.title} style={{ width: "100%", borderRadius: "5px" }} />
               <h3 style={{ margin: "10px 0" }}>{film.title}</h3>
               <p style={{ fontSize: "14px", color: "#aaa" }}>{film.genre}</p>
-              <Link to={`/film/${film.id}`} state={{ film }} style={{ color: "cyan" }}>
+              <Link to={`/film/${film.id}`} style={{ color: "cyan" }}>
                 ▶ Tonton
               </Link>
             </div>
