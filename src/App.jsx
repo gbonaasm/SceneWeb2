@@ -3,6 +3,7 @@ import { Routes, Route, Link } from "react-router-dom";
 import FilmList from "./pages/FilmList";
 import FilmDetail from "./pages/FilmDetail";
 import Home from "./pages/Home";
+import NotFound from "./pages/NotFound"; // 🔹 import
 
 export default function App() {
   return (
@@ -17,9 +18,13 @@ export default function App() {
 
       {/* Routing */}
       <Routes>
-        <Route path="/" element={<FilmList />} />
+        <Route path="/" element={<Home />} />
+        <Route path="/list" element={<FilmList />} />
         <Route path="/film/:id" element={<FilmDetail />} />
         <Route path="/about" element={<h2>Website Streaming Sederhana 🚀</h2>} />
+
+        {/* 🔹 Fallback route */}
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </div>
   );
