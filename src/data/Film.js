@@ -5,58 +5,53 @@ export const films = [
     genre: "Aksi",
     duration: "1j 45m",
     rating: 4.5,
-    description: "Film aksi seru penuh ledakan dan pertarungan sengit.",
-    thumbnail: "/thumbnails/film1.jpg",
-    src: "/videos/film1.mp4"
+    description: "Film aksi seru penuh ledakan.",
+    thumbnail: "https://placehold.co/300x180?text=Film+1",
+    src: "https://www.w3schools.com/html/mov_bbb.mp4",
+    tags: ["aksi", "pahlawan"]
   },
   {
     id: 2,
     title: "Film Kedua",
     genre: "Drama",
     duration: "2j 10m",
-    rating: 4,
-    description: "Drama emosional tentang keluarga dan perjuangan hidup.",
-    thumbnail: "/thumbnails/film2.jpg",
-    src: "/videos/film2.mp4"
+    rating: 4.0,
+    description: "Drama emosional keluarga.",
+    thumbnail: "https://placehold.co/300x180?text=Film+2",
+    src: "https://www.w3schools.com/html/movie.mp4",
+    tags: ["drama", "keluarga"]
   },
   {
     id: 3,
     title: "Film Ketiga",
-    genre: "Komedi",
-    duration: "1j 30m",
-    rating: 3.8,
-    description: "Film komedi kocak yang bikin ketawa nonstop.",
-    thumbnail: "/thumbnails/film3.jpg",
-    src: "/videos/film3.mp4"
+    genre: "Drama",
+    duration: "1j 50m",
+    rating: 4.2,
+    description: "Drama remaja dengan konflik keluarga.",
+    thumbnail: "https://placehold.co/300x180?text=Film+3",
+    src: "https://www.w3schools.com/html/mov_bbb.mp4",
+    tags: ["drama", "keluarga", "remaja"] // 🔹 mirip Film Kedua
   },
   {
     id: 4,
     title: "Film Keempat",
-    genre: "Horor",
-    duration: "1j 50m",
-    rating: 4.2,
-    description: "Horor menegangkan dengan suasana mencekam.",
-    thumbnail: "/thumbnails/film4.jpg",
-    src: "/videos/film4.mp4"
+    genre: "Aksi",
+    duration: "2j",
+    rating: 4.3,
+    description: "Film aksi spionase dengan banyak ledakan.",
+    thumbnail: "https://placehold.co/300x180?text=Film+4",
+    src: "https://www.w3schools.com/html/movie.mp4",
+    tags: ["aksi", "spionase", "ledakan"] // 🔹 mirip Film Pertama
   },
   {
     id: 5,
     title: "Film Kelima",
-    genre: "Sci-Fi",
-    duration: "2j 20m",
-    rating: 4.7,
-    description: "Petualangan epik di luar angkasa dengan visual memukau.",
-    thumbnail: "/thumbnails/film5.jpg",
-    src: "/videos/film5.mp4"
-  },
-  {
-    id: 6,
-    title: "Film Keenam",
-    genre: "Romance",
+    genre: "Romantis",
     duration: "1j 40m",
-    rating: 3.9,
-    description: "Kisah cinta manis penuh lika-liku emosional.",
-    thumbnail: "/thumbnails/film6.jpg",
-    src: "/videos/film6.mp4"
+    rating: 3.8,
+    description: "Kisah cinta remaja penuh liku.",
+    thumbnail: "https://placehold.co/300x180?text=Film+5",
+    src: "https://www.w3schools.com/html/mov_bbb.mp4",
+    tags: ["drama", "remaja", "romantis"] // 🔹 mirip Film Ketiga
   }
 ];
