@@ -1,6 +1,6 @@
 import React from "react";
 import { useParams, Link } from "react-router-dom";
-import { films } from "../data/Film";
+import { films } from "../data/films";
 
 export default function FilmDetail() {
   const { id } = useParams();
@@ -43,24 +43,23 @@ export default function FilmDetail() {
       <div style={{ marginTop: "20px" }}>
         <h3>🏷️ Tagar</h3>
         {film.tags.map((tag) => (
-          <Link 
-              key={tag} 
-              to={`/?tag=${tag}`}   // dilempar ke FilmList dengan query
-              style={{
-                display: "inline-block",
-                marginRight: "10px",
-                marginBottom: "10px",
-                padding: "5px 10px",
-                borderRadius: "20px",
-                background: "#333",
-                color: "cyan",
-                fontSize: "12px",
-                textDecoration: "none"
-              }}
-            >
-              #{tag}
-            </Link>
-
+          <Link
+            key={tag}
+            to={`/films?tag=${tag}`}   // ✅ arahkan ke FilmList
+            style={{
+              display: "inline-block",
+              marginRight: "10px",
+              marginBottom: "10px",
+              padding: "5px 10px",
+              borderRadius: "20px",
+              background: "#333",
+              color: "cyan",
+              fontSize: "12px",
+              textDecoration: "none",
+            }}
+          >
+            #{tag}
+          </Link>
         ))}
       </div>
 
@@ -69,12 +68,17 @@ export default function FilmDetail() {
         <div style={{ marginTop: "30px" }}>
           <h3>🎯 Film Terkait</h3>
           <div
-            style={{ display: "flex", gap: "15px", overflowX: "auto", paddingBottom: "10px" }}
+            style={{
+              display: "flex",
+              gap: "15px",
+              overflowX: "auto",
+              paddingBottom: "10px",
+            }}
           >
             {relatedFilms.map((rel) => (
               <Link
-                key={rel.id}
-                to={`/film/${rel.id}`}
+                key={rel.id}   // ✅ perbaikan: pakai rel.id, bukan tag
+                to={`/film/${rel.id}`}   // ✅ tetap ke detail film
                 style={{ color: "white", textDecoration: "none" }}
               >
                 <div

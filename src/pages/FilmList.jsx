@@ -1,72 +1,73 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import { films } from "../data/Film"; // ✅ pakai data global
+import React from "react";
+import { Link, useLocation } from "react-router-dom";
+import { films } from "../data/films";
 
 export default function FilmList() {
-  const [search, setSearch] = useState("");
-  const [selectedGenre, setSelectedGenre] = useState("All");
+  const location = useLocation();
+  const params = new URLSearchParams(location.search);
+  const tag = params.get("tag"); // 🔹 ambil query ?tag=xxx
 
-  // ambil daftar genre unik
-  const genres = ["All", ...new Set(films.map((f) => f.genre))];
+  
+  
+  // Ambil semua genre unik 
+  const genres = ["All", ...new Set(films.map((film) => film.genre))];
 
-  // filter film berdasarkan search & genre
-  const filteredFilms = films.filter((film) => {
-    const matchesSearch = film.title.toLowerCase().includes(search.toLowerCase());
-    const matchesGenre = selectedGenre === "All" || film.genre === selectedGenre;
-    return matchesSearch && matchesGenre;
-  });
+  // 🔹 Filter film berdasarkan tag jika ada
+  const filteredFilms = tag
+    ? films.filter((film) => film.tags.includes(tag))
+    : films;
 
   return (
-    <div>
-      <h2 style={{ marginBottom: "20px" }}>🎥 Daftar Film</h2>
+    <div style={{ padding: "20px" }}>
+      <h2>📽️ Daftar Film</h2>
 
-      {/* Search */}
-      <input
-        type="text"
-        placeholder="Cari film..."
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-        style={{ padding: "8px", marginBottom: "10px", width: "100%", borderRadius: "5px", border: "1px solid #333" }}
-      />
+      {/* 🔹 Jika ada filter tag */}
+      {tag && (
+        <p style={{ marginBottom: "15px", color: "cyan" }}>
+          Menampilkan film dengan tagar: <strong>#{tag}</strong>
+        </p>
+      )}
 
-      {/* Filter Genre */}
-      <div style={{ marginBottom: "20px" }}>
-        {genres.map((g) => (
-          <button
-            key={g}
-            onClick={() => setSelectedGenre(g)}
-            style={{
-              marginRight: "10px",
-              padding: "6px 12px",
-              borderRadius: "5px",
-              border: "none",
-              cursor: "pointer",
-              background: selectedGenre === g ? "cyan" : "#333",
-              color: selectedGenre === g ? "#000" : "#fff"
-            }}
+      {/* 🔹 List Film */}
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))",
+          gap: "20px",
+        }}
+      >
+        {filteredFilms.map((film) => (
+          <Link
+            key={film.id}
+            to={`/film/${film.id}`}
+            style={{ textDecoration: "none", color: "white" }}
           >
-            {g}
-          </button>
+            <div
+              style={{
+                background: "#222",
+                borderRadius: "8px",
+                padding: "10px",
+                transition: "0.3s",
+              }}
+            >
+              <img
+                src={film.thumbnail}
+                alt={film.title}
+                style={{ width: "100%", borderRadius: "5px" }}
+              />
+              <h3 style={{ marginTop: "10px" }}>{film.title}</h3>
+              <p style={{ fontSize: "14px", color: "gray" }}>{film.genre}</p>
+            </div>
+          </Link>
         ))}
       </div>
 
-      {/* Grid Film */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "20px" }}>
-        {filteredFilms.length > 0 ? (
-          filteredFilms.map((film) => (
-            <div key={film.id} style={{ background: "#222", padding: "10px", borderRadius: "8px" }}>
-              <img src={film.thumbnail} alt={film.title} style={{ width: "100%", borderRadius: "5px" }} />
-              <h3 style={{ margin: "10px 0" }}>{film.title}</h3>
-              <p style={{ fontSize: "14px", color: "#aaa" }}>{film.genre}</p>
-              <Link to={`/film/${film.id}`} style={{ color: "cyan" }}>
-                ▶ Tonton
-              </Link>
-            </div>
-          ))
-        ) : (
-          <p>Tidak ada film ditemukan</p>
-        )}
-      </div>
+      {/* 🔹 Jika tidak ada film ditemukan */}
+      {filteredFilms.length === 0 && (
+        <p style={{ marginTop: "20px", color: "red" }}>
+          Tidak ada film dengan tagar <strong>#{tag}</strong>.
+        </p>
+      )}
     </div>
   );
 }

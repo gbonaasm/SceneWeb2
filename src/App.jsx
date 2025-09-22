@@ -13,13 +13,13 @@ export default function App() {
       {/* Navigasi */}
       <nav style={{ marginBottom: "20px" }}>
         <Link to="/" style={{ marginRight: "10px", color: "cyan" }}>Home</Link>
-        <Link to="/list" style={{ color: "cyan" }}>List Film</Link>
+        <Link to="/films" style={{ color: "cyan" }}>List Film</Link>
       </nav>
 
       {/* Routing */}
       <Routes>
+        <Route path="/films" element={<FilmList />} />   {/* ✅ route untuk list film */}
         <Route path="/" element={<Home />} />
-        <Route path="/list" element={<FilmList />} />
         <Route path="/film/:id" element={<FilmDetail />} />
         <Route path="/about" element={<h2>Website Streaming Sederhana 🚀</h2>} />
 
