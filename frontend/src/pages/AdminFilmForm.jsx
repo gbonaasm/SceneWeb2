@@ -5,21 +5,25 @@ import { useNavigate, useParams } from "react-router-dom";
 export default function AdminFilmForm({ isEdit = false }) {
   const navigate = useNavigate();
   const { id } = useParams();
+
   const [film, setFilm] = useState({
     title: "",
     description: "",
     genre: "",
     duration: "",
     rating: "",
-    src: "",
     tags: "",
   });
 
+  const [thumbnailFile, setThumbnailFile] = useState(null);
+  const [videoFile, setVideoFile] = useState(null);
+
+  // 🚀 Kalau edit, fetch data film dulu
   useEffect(() => {
-    if (isEdit) {
+    if (isEdit && id) {
       fetchFilm();
     }
-  }, [isEdit]);
+  }, [isEdit, id]);
 
   const fetchFilm = async () => {
     try {
@@ -29,7 +33,7 @@ export default function AdminFilmForm({ isEdit = false }) {
         tags: res.data.tags?.join(",") || "",
       });
     } catch (err) {
-      console.error("Gagal load film:", err);
+      console.error("❌ Gagal load film:", err);
     }
   };
 
@@ -37,37 +41,67 @@ export default function AdminFilmForm({ isEdit = false }) {
     setFilm({ ...film, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const token = localStorage.getItem("token");
-
-    try {
-      const payload = {
-        ...film,
-        tags: film.tags.split(",").map((t) => t.trim()),
-      };
-
-      if (isEdit) {
-        await API.put(`/films/${id}`, payload, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-      } else {
-        await API.post(`/films`, payload, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-      }
-
-      navigate("/admin/films");
-    } catch (err) {
-      console.error("❌ Error simpan film:", err);
-      alert("Gagal menyimpan film");
-    }
+  const handleFileChange = (e) => {
+    const { name, files } = e.target;
+    if (name === "thumbnail") setThumbnailFile(files[0]);
+    if (name === "video") setVideoFile(files[0]);
   };
+
+ const handleSubmit = async (e) => {
+  e.preventDefault();
+  const token = localStorage.getItem("token");
+
+  try {
+    const formData = new FormData();
+
+    // ✅ Tambahkan field teks
+    Object.entries(film).forEach(([key, value]) => {
+      if (key === "tags") {
+        const tagArray = value
+          .split(",")
+          .map((t) => t.trim().replace(/^#/, "")) // hilangkan tanda #
+          .filter(Boolean);
+
+        // Simpan tiap tag sebagai array terpisah
+        tagArray.forEach((tag) => formData.append("tags", tag));
+      } else {
+        formData.append(key, value);
+      }
+    }); // ← kamu tadi lupa nutup blok ini
+
+    // ✅ Tambahkan file jika ada
+    if (thumbnailFile) formData.append("thumbnail", thumbnailFile);
+    if (videoFile) formData.append("video", videoFile);
+
+    // ✅ Kirim data
+    if (isEdit) {
+      await API.put(`/films/${id}`, formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
+        },
+      });
+    } else {
+      await API.post(`/films`, formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
+        },
+      });
+    }
+
+    navigate("/admin/films");
+  } catch (err) {
+    console.error("❌ Error simpan film:", err);
+    alert("Gagal menyimpan film");
+  }
+};
 
   return (
     <div style={{ padding: "20px" }}>
       <h2>{isEdit ? "Edit Film" : "Tambah Film Baru"}</h2>
-      <form onSubmit={handleSubmit}>
+
+      <form onSubmit={handleSubmit} encType="multipart/form-data">
         <input
           type="text"
           name="title"
@@ -94,9 +128,9 @@ export default function AdminFilmForm({ isEdit = false }) {
         /><br />
 
         <input
-          type="number"
+          type="text"
           name="duration"
-          placeholder="Durasi (menit)"
+          placeholder="Durasi (contoh: 1j 30m)"
           value={film.duration}
           onChange={handleChange}
         /><br />
@@ -110,12 +144,22 @@ export default function AdminFilmForm({ isEdit = false }) {
           onChange={handleChange}
         /><br />
 
+        {/* ✅ Upload Thumbnail */}
+        <label>Thumbnail:</label>
         <input
-          type="text"
-          name="src"
-          placeholder="Link video"
-          value={film.src}
-          onChange={handleChange}
+          type="file"
+          name="thumbnail"
+          accept="image/*"
+          onChange={handleFileChange}
+        /><br />
+
+        {/* ✅ Upload Video */}
+        <label>Video:</label>
+        <input
+          type="file"
+          name="video"
+          accept="video/*"
+          onChange={handleFileChange}
         /><br />
 
         <input

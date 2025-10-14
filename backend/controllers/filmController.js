@@ -68,6 +68,9 @@ export const createFilm = async (req, res) => {
   try {
     const { title, description, genre, duration, link } = req.body;
 
+    const thumbnailUrl = req.files?.thumbnail?.[0]?.path || null;
+    const videoUrl = req.files?.video?.[0]?.path || null;
+
     const newFilm = new Film({
       title,
       description,
@@ -85,6 +88,35 @@ export const createFilm = async (req, res) => {
   } catch (err) {
     console.error("Error creating film:", err);
     res.status(500).json({ message: "Gagal menambahkan film" });
+  }
+};
+
+// Update film
+export const updateFilm = async (req, res) => {
+  try {
+    const { title, description, genre, duration, rating, src, thumbnail, tags } = req.body;
+
+    const film = await Film.findByIdAndUpdate(
+      req.params.id,
+      { title, description, genre, duration, rating, src, thumbnail, tags },
+      { new: true }
+    );
+
+    if (!film) return res.status(404).json({ message: "Film tidak ditemukan" });
+    res.json(film);
+  } catch (err) {
+    console.error("Error update film:", err);
+    res.status(500).json({ message: "Gagal update film" });
+  }
+};
+
+export const deleteFilm = async (req, res) => {
+  try {
+    const film = await Film.findByIdAndDelete(req.params.id);
+    if (!film) return res.status(404).json({ message: "Film tidak ditemukan" });
+    res.json({ message: "Film berhasil dihapus" });
+  } catch (err) {
+    res.status(500).json({ message: "Gagal menghapus film" });
   }
 };
 
