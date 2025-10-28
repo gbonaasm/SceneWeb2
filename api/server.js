@@ -1,26 +1,33 @@
 import express from "express";
-import dotenv from "dotenv";
 import mongoose from "mongoose";
 import cors from "cors";
+import dotenv from "dotenv";
+import path from "path";
+import { fileURLToPath } from "url";
+
+// ✅ Pastikan .env dibaca dari folder `api`
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+dotenv.config({ path: path.join(__dirname, ".env") });
+
+// Debug: pastikan env terbaca
+console.log("🔍 MONGO_URI:", process.env.MONGO_URI);
+
 import filmRoutes from "./routes/filmRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
 
-
-dotenv.config();
 const app = express();
-
 app.use(cors());
 app.use(express.json());
 
-// MongoDB connect
-mongoose.connect(process.env.MONGO_URI)
+mongoose
+  .connect(process.env.MONGO_URI)
   .then(() => console.log("✅ MongoDB connected"))
-  .catch((err) => console.error(err));
+  .catch((err) => console.error("❌ MongoDB error:", err.message));
 
 app.get("/", (req, res) => res.send("API running..."));
 
-// Routes
 app.use("/api/films", filmRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/auth", authRoutes);
